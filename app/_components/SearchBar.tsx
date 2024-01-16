@@ -1,9 +1,9 @@
-"use client";
-import { useState } from "react";
+import { KeyboardEvent } from "react";
 import { FaSearch } from "react-icons/fa";
 
 import "../_assets/styles.css";
 import { SearchBarProps, User } from "../_types/types";
+import fetchRandomUserData from "../_utils/utils";
 
 export const SearchBar: React.FC<SearchBarProps> = ({
 	setResults,
@@ -14,37 +14,24 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 	lastSelectedIndex,
 	setLastSelectedIndex,
 }) => {
-	const fetchData = (value:string) => {
-		fetch("https://jsonplaceholder.typicode.com/users")
-			.then((response) => response.json())
-			.then((json) => {
-				const filteredResults = json.filter((user:User) => {
-					return (
-						value &&
-						user &&
-						user.name &&
-						user.name.toLowerCase().includes(value) &&
-						!selectedNames.some(
-							(selectedUser) => selectedUser.id === user.id
-						)
-					);
-				});
-				setResults(filteredResults);
-			});
+	const fetchData = async (value: string) => {
+		const filteredData = await fetchRandomUserData(value, selectedNames);
+		setResults(filteredData);
 	};
 
-	const handleRemoveUser = (userId:number) => {
+	const handleRemoveUser = (userId: number) => {
 		setSelectedNames((prevUsers) =>
 			prevUsers.filter((user) => user.id !== userId)
 		);
 	};
 
-	const handleChange = (value:string) => {
+	const handleChange = (value: string) => {
 		setInput(value);
 		fetchData(value);
 	};
 
-	const handleBackspace = () => {
+	const handleBackspace = (e: KeyboardEvent<HTMLInputElement>) => {
+		e.preventDefault();
 		if (lastSelectedIndex !== null) {
 			const lastUser = selectedNames[lastSelectedIndex];
 			if (lastUser) {
@@ -57,8 +44,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 	};
 
 	return (
-		<div className="input-wrapper">
-			<FaSearch id="search-icon" />
+		<div>
 			<div className="chips-container">
 				{selectedNames.map((user, index) => (
 					<div
@@ -69,7 +55,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 					>
 						{user.name}
 						<span
-							className="remove-icon"
+							className={`remove-icon ${
+								index === lastSelectedIndex ? "highlight" : ""
+							}`}
 							onClick={() => handleRemoveUser(user.id)}
 						>
 							&times;
@@ -77,12 +65,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 					</div>
 				))}
 			</div>
-			<input
-				placeholder="Type to search..."
-				value={input}
-				onKeyDown={(e) => e.key === "Backspace" && handleBackspace()}
-				onChange={(e) => handleChange(e.target.value)}
-			/>
+			<div>
+				<input
+					placeholder="Type to search..."
+					value={input}
+					onKeyDown={(e) =>
+						input === "" &&
+						e.key === "Backspace" &&
+						handleBackspace(e)
+					}
+					onChange={(e) => handleChange(e.target.value)}
+				/>
+			</div>
 		</div>
 	);
 };

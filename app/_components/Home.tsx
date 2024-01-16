@@ -9,7 +9,9 @@ function Home() {
 	const [results, setResults] = useState<User[]>([]);
 	const [selectedNames, setSelectedNames] = useState<User[]>([]);
 	const [input, setInput] = useState<string>("");
-	const [lastSelectedIndex, setLastSelectedIndex] = useState<number|null>(null);
+	const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(
+		null
+	);
 
 	const handleSelectUser = (selectedUser: User) => {
 		setSelectedNames((prevUsers) => [...prevUsers, selectedUser]);
@@ -19,6 +21,16 @@ function Home() {
 
 	return (
 		<div className="app">
+			<h1
+				style={{
+					fontWeight: "bolder",
+					textAlign: "center",
+					paddingTop: "25px",
+					fontSize:"xx-large"
+				}}
+			>
+				Please Start Typing to get suggestion dropdown
+			</h1>
 			<div className="search-bar-container">
 				<SearchBar
 					setResults={setResults}

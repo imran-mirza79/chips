@@ -23,7 +23,7 @@
 }
 
 .input-wrapper {
-    width: 100%;
+    width: 400vw;
     height: 2.5rem;
     border: none;
     border-radius: 10px;
@@ -32,16 +32,18 @@
     background-color: white;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 input {
     background-color: transparent;
-    border: none;
     height: 100%;
     font-size: 1.25rem;
-    width: 100%;
+    width: 50vw;
     margin-left: 5px;
-    /* overflow: scroll; */
+    border-bottom: black solid 1.5px;
+    padding: 0.5rem;
 }
 
 input:focus {
@@ -53,7 +55,7 @@ input:focus {
 }
 
 .results-list {
-    width: 100%;
+    width: 50vw;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -68,29 +70,34 @@ input:focus {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    /* width: 75%; */
+    max-width: 50vw;
 }
 
 .chip {
     display: inline-flex;
     align-items: center;
-    background-color: whitesmoke;
+    background-color: white;
+    border: black solid 1.75px;
     padding: 6px;
     border-radius: 4px;
     margin: 4px;
-    font-size: x-small;
+    font-size: small;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis
+    text-overflow: ellipsis;
+    max-width: fit-content;
 }
 
 .remove-icon {
     margin-left: 8px;
     cursor: pointer;
     color: gray;
+    font-weight: bolder;
+    font-size: large;
 }
 
 .highlight {
-    background-color: grey !important;
+    background-color: rgba(128, 128, 128) !important;
     font-weight: bolder;
+    color: whitesmoke;
 }

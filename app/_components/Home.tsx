@@ -26,7 +26,7 @@ function Home() {
 					fontWeight: "bolder",
 					textAlign: "center",
 					paddingTop: "25px",
-					fontSize:"xx-large"
+					fontSize: "xx-large",
 				}}
 			>
 				Please Start Typing to get suggestion dropdown
@@ -48,6 +48,35 @@ function Home() {
 					/>
 				)}
 			</div>
+			{results.length === 0 && input !== "" ? (
+				<p
+					style={{
+						fontWeight: "bolder",
+						textAlign: "center",
+						paddingTop: "25px",
+						fontSize: "large",
+					}}
+				>
+					No Name contains {input}{" "}
+				</p>
+			) : (
+				<></>
+			)}
+			{selectedNames.length > 0 ? (
+				<p
+					style={{
+						fontWeight: "bolder",
+						textAlign: "center",
+						paddingTop: "25px",
+						fontSize: "large",
+					}}
+				>
+					Check with backpress key, the chip gets highlighted on
+					single press and then deleted
+				</p>
+			) : (
+				<></>
+			)}
 		</div>
 	);
 }

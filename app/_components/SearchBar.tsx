@@ -3,21 +3,22 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
 import "../_assets/styles.css";
+import { SearchBarProps, User } from "../_types/types";
 
-export const SearchBar = ({
+export const SearchBar: React.FC<SearchBarProps> = ({
 	setResults,
 	selectedNames,
 	setSelectedNames,
 	input,
 	setInput,
+	lastSelectedIndex,
+	setLastSelectedIndex,
 }) => {
-  const [lastSelectedIndex, setLastSelectedIndex] = useState(null);
-
-	const fetchData = (value) => {
+	const fetchData = (value:string) => {
 		fetch("https://jsonplaceholder.typicode.com/users")
 			.then((response) => response.json())
 			.then((json) => {
-				const filteredResults = json.filter((user) => {
+				const filteredResults = json.filter((user:User) => {
 					return (
 						value &&
 						user &&
@@ -32,34 +33,38 @@ export const SearchBar = ({
 			});
 	};
 
-	const handleRemoveUser = (userId) => {
+	const handleRemoveUser = (userId:number) => {
 		setSelectedNames((prevUsers) =>
 			prevUsers.filter((user) => user.id !== userId)
 		);
 	};
 
-	const handleChange = (value) => {
+	const handleChange = (value:string) => {
 		setInput(value);
 		fetchData(value);
 	};
 
-	 const handleBackspace = () => {
-			if (lastSelectedIndex !== null) {
-				// Remove the last chip on backspace press
-				const lastUser = selectedUsers[lastSelectedIndex];
+	const handleBackspace = () => {
+		if (lastSelectedIndex !== null) {
+			const lastUser = selectedNames[lastSelectedIndex];
+			if (lastUser) {
 				handleRemoveUser(lastUser.id);
 			}
-		};
+			setLastSelectedIndex(null);
+		} else if (selectedNames.length > 0) {
+			setLastSelectedIndex(selectedNames.length - 1);
+		}
+	};
 
 	return (
 		<div className="input-wrapper">
 			<FaSearch id="search-icon" />
 			<div className="chips-container">
-				{selectedNames.map((user) => (
+				{selectedNames.map((user, index) => (
 					<div
 						key={user.id}
 						className={`chip ${
-							backspaceCount === 1 ? "highlight" : ""
+							index === lastSelectedIndex ? "highlight" : ""
 						}`}
 					>
 						{user.name}
